@@ -42,23 +42,22 @@ The engine is designed to help teams reduce stockouts, avoid overbuying, protect
 
 ## Screenshot Gallery
 
-> Place your screenshots inside `docs/assets/` and keep these names, or update the paths below.
-
 ### Executive Dashboard
 
-![](Images/Execuive.png)
+![](Images/Executive.png)
 
 ### Visible PO Cadence Controls
 
-![PO Cadence Controls](docs/assets/po-engine-cadence-controls.png)
+![](Images/POCandence.png)
 
 ### Item-Level Decision Table
 
-![Item Decision Table](docs/assets/po-engine-item-decisions.png)
+![](Images/Item.png)
 
 ### Brand Health Analytics
 
-![Brand Health](docs/assets/po-engine-brand-health.png)
+![](Images/BrandHealth.png)
+![](Images/BrandHealth1.png)
 
 ### Purchase History Intelligence
 
@@ -66,7 +65,9 @@ The engine is designed to help teams reduce stockouts, avoid overbuying, protect
 
 ### Lost Sales View
 
-![Lost Sales](docs/assets/po-engine-lost-sales.png)
+![](Images/Lost Sales.png)
+
+![](Images/Lost Sales1.png)
 
 ---
 
