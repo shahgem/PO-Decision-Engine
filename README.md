@@ -8,7 +8,7 @@
 
 <br/>
 
-![PO Decision Engine Dashboard](Images/PO Decison Engine.png)
+![PODecisionEngine](PODecisonEngine.png)
 
 <br/>
 
