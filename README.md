@@ -46,7 +46,7 @@ The engine is designed to help teams reduce stockouts, avoid overbuying, protect
 
 ### Executive Dashboard
 
-![Executive Dashboard](docs/assets/po-engine-dashboard.png)
+![](Images/Execuive.png)
 
 ### Visible PO Cadence Controls
 
