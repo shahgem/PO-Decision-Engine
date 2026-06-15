@@ -65,9 +65,9 @@ The engine is designed to help teams reduce stockouts, avoid overbuying, protect
 
 ### Lost Sales View
 
-![](Images/Lost Sales.png)
+![](Images/LostSales.png)
 
-![](Images/Lost Sales1.png)
+![](Images/LostSales1.png)
 
 ---
 
