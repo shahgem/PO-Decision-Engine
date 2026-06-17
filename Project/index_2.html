@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PO Decision Engine — Boardroom-Grade Purchase Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06090F;
+  --bg1:#0C1220;
+  --bg2:#111827;
+  --bg3:#1a2236;
+  --blue:#3B82F6;
+  --blue-dim:#1D4ED8;
+  --blue-glow:rgba(59,130,246,0.15);
+  --amber:#F59E0B;
+  --amber-dim:#D97706;
+  --green:#22C55E;
+  --red:#EF4444;
+  --yellow:#EAB308;
+  --purple:#8B5CF6;
+  --t1:#F9FAFB;
+  --t2:#9CA3AF;
+  --t3:#4B5563;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.10);
+  --ff:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--bg);color:var(--t1);line-height:1.6;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(6,9,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;letter-spacing:-.02em}
+.nav-logo-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.nav-links{display:flex;gap:28px}
+.nav-links a{font-size:13px;color:var(--t2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--t1)}
+.nav-cta{background:var(--blue);color:#fff;font-size:13px;font-weight:600;padding:7px 18px;border-radius:8px;text-decoration:none;transition:background .2s}
+.nav-cta:hover{background:var(--blue-dim)}
+
+/* HERO */
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:80px 40px 60px;position:relative;overflow:hidden}
+.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-glow{position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(59,130,246,0.08) 0%,transparent 70%);pointer-events:none}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:28px}
+.hero-eyebrow-dot{width:5px;height:5px;background:var(--blue);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.hero-title{font-size:clamp(38px,6vw,72px);font-weight:900;line-height:1.0;letter-spacing:-.04em;margin-bottom:8px}
+.hero-title-accent{color:var(--blue)}
+.hero-tagline{font-size:clamp(15px,2vw,20px);color:var(--t2);max-width:620px;line-height:1.65;margin-bottom:36px;font-weight:400}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;font-size:14px;font-weight:600;padding:12px 24px;border-radius:10px;text-decoration:none;transition:background .2s,transform .1s}
+.btn-primary:hover{background:var(--blue-dim);transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--t1);font-size:14px;font-weight:500;padding:11px 24px;border-radius:10px;border:1px solid var(--border2);text-decoration:none;transition:background .2s,border-color .2s}
+.btn-ghost:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.2)}
+
+/* HERO STATS */
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;max-width:700px}
+.hero-stat{background:var(--bg1);padding:20px 24px}
+.hero-stat-num{font-size:28px;font-weight:800;font-family:var(--mono);color:var(--blue);line-height:1}
+.hero-stat-lbl{font-size:11px;color:var(--t3);margin-top:5px;font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+
+/* SCREENSHOT SHOWCASE */
+.showcase{padding:80px 40px;background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.showcase-inner{max-width:1100px;margin:0 auto}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.section-title{font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-.03em;margin-bottom:12px;line-height:1.15}
+.section-sub{font-size:15px;color:var(--t2);max-width:560px;line-height:1.65;margin-bottom:48px}
+
+.feature-block{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:96px}
+.feature-block.reverse{direction:rtl}
+.feature-block.reverse > *{direction:ltr}
+.feature-img-wrap{border-radius:14px;overflow:hidden;border:1px solid var(--border2);position:relative}
+.feature-img-wrap img{width:100%;display:block;transition:transform .6s ease}
+.feature-img-wrap:hover img{transform:scale(1.02)}
+.feature-img-badge{display:block;margin-top:8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:var(--blue);font-family:var(--mono);letter-spacing:.04em;width:fit-content}
+.feature-content{}
+.feature-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:16px}
+.feature-title{font-size:clamp(20px,3vw,30px);font-weight:800;letter-spacing:-.025em;line-height:1.2;margin-bottom:14px}
+.feature-desc{font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:24px}
+.feature-points{list-style:none;display:flex;flex-direction:column;gap:10px}
+.feature-points li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--t2)}
+.feature-points li::before{content:'';width:4px;height:4px;background:var(--blue);border-radius:50%;margin-top:7px;flex-shrink:0}
+
+/* DECISION FRAMEWORK SECTION */
+.framework{padding:80px 40px;max-width:1100px;margin:0 auto}
+.decision-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:56px}
+.decision-card{background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:20px 16px;text-align:center;transition:border-color .2s,transform .2s;cursor:default}
+.decision-card:hover{transform:translateY(-3px)}
+.decision-card.order{border-top:2px solid var(--green)}
+.decision-card.watch{border-top:2px solid var(--yellow)}
+.decision-card.hold{border-top:2px solid var(--amber)}
+.decision-card.ok{border-top:2px solid var(--blue)}
+.decision-card.skip{border-top:2px solid var(--red)}
+.dc-dot{width:10px;height:10px;border-radius:50%;margin:0 auto 10px}
+.dc-label{font-size:14px;font-weight:700;margin-bottom:6px}
+.dc-desc{font-size:11px;color:var(--t3);line-height:1.5}
+.order .dc-dot{background:var(--green)}
+.watch .dc-dot{background:var(--yellow)}
+.hold .dc-dot{background:var(--amber)}
+.ok .dc-dot{background:var(--blue)}
+.skip .dc-dot{background:var(--red)}
+.order .dc-label{color:var(--green)}
+.watch .dc-label{color:var(--yellow)}
+.hold .dc-label{color:var(--amber)}
+.ok .dc-label{color:var(--blue)}
+.skip .dc-label{color:var(--red)}
+
+/* METRICS STRIP */
+.metrics-strip{background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 40px}
+.metrics-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.metric-cell{background:var(--bg1);padding:28px 32px}
+.metric-val{font-size:36px;font-weight:800;font-family:var(--mono);line-height:1;margin-bottom:6px}
+.metric-label{font-size:12px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.metric-sub{font-size:12px;color:var(--t2)}
+
+/* CADENCE SECTION */
+.cadence{padding:80px 40px}
+.cadence-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
+.cadence-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cadence-card{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:16px}
+.cadence-card:hover{border-color:var(--border2)}
+.cadence-name{font-size:12px;font-weight:600;color:var(--t1);margin-bottom:4px;font-family:var(--mono)}
+.cadence-def{font-size:11px;color:var(--t3);line-height:1.5}
+
+/* FLOW */
+.flow{padding:80px 40px;background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.flow-inner{max-width:1100px;margin:0 auto}
+.flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:48px}
+.flow-step{padding:28px 24px;border-right:1px solid var(--border);position:relative}
+.flow-step:last-child{border-right:none}
+.flow-num{font-size:11px;font-weight:700;color:var(--blue);font-family:var(--mono);margin-bottom:12px;letter-spacing:.06em}
+.flow-step-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.flow-step-desc{font-size:12px;color:var(--t2);line-height:1.6}
+.flow-arrow{position:absolute;top:28px;right:-12px;width:24px;height:24px;background:var(--bg2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2}
+.flow-arrow svg{width:10px;height:10px;stroke:var(--blue);fill:none;stroke-width:2}
+
+/* IMPACT */
+.impact{padding:80px 40px;max-width:1100px;margin:0 auto}
+.impact-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.impact-card{background:var(--bg1);border:1px solid var(--border);border-radius:14px;padding:28px}
+.impact-card-head{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.impact-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.impact-icon-blue{background:rgba(59,130,246,0.12)}
+.impact-icon-amber{background:rgba(245,158,11,0.1)}
+.impact-icon-green{background:rgba(34,197,94,0.1)}
+.impact-card-title{font-size:14px;font-weight:700;color:var(--t1)}
+.impact-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.impact-list li{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:8px}
+.impact-list li::before{content:'';width:3px;height:3px;border-radius:50%;flex-shrink:0}
+.impact-card:nth-child(1) .impact-list li::before{background:var(--blue)}
+.impact-card:nth-child(2) .impact-list li::before{background:var(--amber)}
+.impact-card:nth-child(3) .impact-list li::before{background:var(--green)}
+
+/* DATA MODEL */
+.data-model{padding:80px 40px;background:var(--bg1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.data-inner{max-width:1100px;margin:0 auto}
+.sheets-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.sheet-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.sheet-name{font-size:12px;font-weight:600;color:var(--blue);font-family:var(--mono);margin-bottom:6px}
+.sheet-desc{font-size:12px;color:var(--t2);line-height:1.5}
+.input-pills{display:flex;flex-wrap:wrap;gap:8px}
+.input-pill{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;font-size:12px;font-weight:500;color:var(--t2)}
+
+/* ROADMAP */
+.roadmap{padding:80px 40px;max-width:1100px;margin:0 auto}
+.roadmap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:40px}
+.road-item{background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--t2);font-weight:500;transition:border-color .2s,color .2s}
+.road-item:hover{border-color:var(--border2);color:var(--t1)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 40px;text-align:center}
+.footer-title{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.footer-sub{font-size:14px;color:var(--t3);margin-bottom:24px}
+.footer-badges{display:flex;justify-content:center;flex-wrap:wrap;gap:8px}
+.fbadge{display:inline-flex;align-items:center;gap:6px;background:var(--bg1);border:1px solid var(--border2);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:500;color:var(--t2)}
+
+/* SCROLL ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.stagger-1{transition-delay:.1s}
+.stagger-2{transition-delay:.2s}
+.stagger-3{transition-delay:.3s}
+.stagger-4{transition-delay:.4s}
+
+/* TICKER */
+.ticker-section{padding:0 40px 80px}
+.ticker-inner{max-width:1100px;margin:0 auto}
+.ticker-wrap{background:var(--bg1);border:1px solid var(--border);border-radius:14px;padding:24px 28px}
+.ticker-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.ticker-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3)}
+.ticker-pills{display:flex;gap:8px;flex-wrap:wrap}
+.tpill{display:inline-flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid;opacity:0;transform:translateY(8px);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.tpill.show{opacity:1;transform:translateY(0)}
+.tpill-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.tp-order{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#4ADE80}
+.tp-watch{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.2);color:#FACC15}
+.tp-hold{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:#FCD34D}
+.tp-ok{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2);color:#60A5FA}
+.tp-skip{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:#F87171}
+
+/* DISCLAIMER */
+.disclaimer{max-width:1100px;margin:0 auto 48px;padding:0 40px}
+.disclaimer-box{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.15);border-radius:10px;padding:16px 20px;font-size:13px;color:var(--t2);line-height:1.6}
+.disclaimer-box strong{color:var(--amber)}
+
+@media(max-width:900px){
+  .feature-block{grid-template-columns:1fr;gap:32px}
+  .feature-block.reverse{direction:ltr}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .decision-grid{grid-template-columns:repeat(3,1fr)}
+  .impact-grid,.flow-steps,.sheets-grid,.roadmap-grid{grid-template-columns:1fr 1fr}
+  .metrics-inner,.cadence-inner{grid-template-columns:1fr;gap:0}
+  .nav-links{display:none}
+}
+@media(max-width:560px){
+  .hero,.showcase,.cadence,.flow,.impact,.data-model,.roadmap,footer,.ticker-section,.disclaimer{padding-left:20px;padding-right:20px}
+  nav{padding:0 20px}
+  .hero-stats,.decision-grid,.impact-grid,.flow-steps,.sheets-grid,.roadmap-grid{grid-template-columns:1fr}
+  .cadence-controls{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    PO Decision Engine
+    <span style="background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:var(--blue);font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;font-family:var(--mono)">v8.28</span>
+  </div>
+  <div class="nav-links">
+    <a href="#cockpit">Cockpit</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#brand-health">Brand Health</a>
+    <a href="#lost-sales">Lost Sales</a>
+    <a href="#data-model">Data Model</a>
+  </div>
+  <a href="#cockpit" class="nav-cta">View Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up">
+      <div class="hero-eyebrow-dot"></div>
+      Boardroom-Grade Purchase Intelligence
+    </div>
+    <h1 class="hero-title fade-up stagger-1">
+      Board-ready purchase<br/>decisions, not another<br/><span class="hero-title-accent">spreadsheet.</span>
+    </h1>
+    <p class="hero-tagline fade-up stagger-2">
+      From service-risk signal to defended purchase order in one workflow. The audited engine translates demand evidence, stockout risk, and vendor economics into a PO you can stand behind.
+    </p>
+    <div class="hero-actions fade-up stagger-3">
+      <a href="#cockpit" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Explore the engine
+      </a>
+      <a href="#data-model" class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Data model
+      </a>
+    </div>
+    <div class="hero-stats fade-up stagger-4">
+      <div class="hero-stat">
+        <div class="hero-stat-num">5</div>
+        <div class="hero-stat-lbl">Decision states</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-lbl">Data sheets</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-lbl">Auditable logic</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">$0</div>
+        <div class="hero-stat-lbl">Black-box scoring</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DECISION TICKER -->
+<div class="ticker-section" style="padding-top:60px">
+  <div class="ticker-inner">
+    <div class="ticker-wrap fade-up">
+      <div class="ticker-head">
+        <div class="ticker-title">Live decision classifications — every SKU gets one</div>
+      </div>
+      <div class="ticker-pills" id="ticker">
+        <div class="tpill tp-order"><div class="tpill-dot"></div>Order — Purchase action required</div>
+        <div class="tpill tp-watch"><div class="tpill-dot"></div>Watch — Approaching risk zone</div>
+        <div class="tpill tp-hold"><div class="tpill-dot"></div>Hold — Excess cover risk</div>
+        <div class="tpill tp-ok"><div class="tpill-dot"></div>OK — Healthy position</div>
+        <div class="tpill tp-skip"><div class="tpill-dot"></div>Skip — Weak demand signal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXECUTIVE COCKPIT -->
+<section class="showcase" id="cockpit">
+  <div class="showcase-inner">
+    <div class="section-label fade-up">01 — Executive cockpit</div>
+    <h2 class="section-title fade-up">One screen. Complete purchase story.</h2>
+    <p class="section-sub fade-up">Service risk, capital at risk, and exactly what action is ready — before any line-level drilldown.</p>
+
+    <div class="feature-block fade-up">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/Executive.png" alt="Executive Purchase Command Center"/>
+      </div>
+      <div class="feature-img-badge">BOARDROOM v8.27</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Executive Command Center</div>
+        <h3 class="feature-title">From signal to defended PO in one workflow.</h3>
+        <p class="feature-desc">The boardroom layer surfaces the story directors care about — PO value ready, stockout pressure, review backlog, and PO-ready control check — without touching the formula layer underneath.</p>
+        <ul class="feature-points">
+          <li>PO Value Ready: total engine-recommended spend across current scope</li>
+          <li>Stockout Pressure: items where cover falls below lead time</li>
+          <li>Review Backlog: buyer exceptions requiring a decision before export</li>
+          <li>100% PO-Ready control check — vendor and unit-cost controls verified</li>
+          <li>Next action surfaced inline — no meeting required</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ITEM TABLE -->
+    <div class="feature-block reverse fade-up" id="decisions">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/Item.png" alt="Item-Level Decision Table"/>
+      </div>
+      <div class="feature-img-badge">ITEM DECISION TABLE</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Item-Level Intelligence</div>
+        <h3 class="feature-title">Every SKU. Scored, classified, and auditable.</h3>
+        <p class="feature-desc">Every item receives a classification, score, recommended quantity, unit value, PO value, and item-level audit trail. Filter by risk signal, movement class, or exception type without changing the underlying formula.</p>
+        <ul class="feature-points">
+          <li>13 filter chips: Below ROP, Critical, Cover &lt; lead time, Watch, Seasonal, A-class, Fast/Slow/Non-moving, Overstock, Dead stock, Obsolete, Cadence PO</li>
+          <li>Editable order quantities with live PO value calculation</li>
+          <li>Click any row to open the ROP audit trail</li>
+          <li>Auto-add all engine recommendations to basket in one click</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DECISION FRAMEWORK -->
+<section style="padding:80px 40px 40px">
+  <div style="max-width:1100px;margin:0 auto">
+    <div class="section-label fade-up">02 — Decision framework</div>
+    <h2 class="section-title fade-up">Five states. Zero ambiguity.</h2>
+    <p class="section-sub fade-up">Each item gets exactly one classification. Each classification drives exactly one action.</p>
+    <div class="decision-grid">
+      <div class="decision-card order fade-up stagger-1">
+        <div class="dc-dot"></div>
+        <div class="dc-label">Order</div>
+        <div class="dc-desc">Below transparent ROP — purchase action required now</div>
+      </div>
+      <div class="decision-card watch fade-up stagger-2">
+        <div class="dc-dot"></div>
+        <div class="dc-label">Watch</div>
+        <div class="dc-desc">Approaching risk zone — needs buyer decision</div>
+      </div>
+      <div class="decision-card hold fade-up stagger-3">
+        <div class="dc-dot"></div>
+        <div class="dc-label">Hold</div>
+        <div class="dc-desc">Excess cover risk — buying now traps capital</div>
+      </div>
+      <div class="decision-card ok fade-up stagger-4">
+        <div class="dc-dot"></div>
+        <div class="dc-label">OK</div>
+        <div class="dc-desc">Healthy inventory position — no immediate action</div>
+      </div>
+      <div class="decision-card skip fade-up stagger-4">
+        <div class="dc-dot"></div>
+        <div class="dc-label">Skip</div>
+        <div class="dc-desc">Weak or absent demand signal — excluded from PO flow</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip fade-up">
+  <div class="metrics-inner">
+    <div class="metric-cell">
+      <div class="metric-label">PO value ready</div>
+      <div class="metric-val" style="color:var(--blue)">$43K</div>
+      <div class="metric-sub">7 engine-recommended lines</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">Stockout pressure</div>
+      <div class="metric-val" style="color:var(--red)">8</div>
+      <div class="metric-sub">cover below lead time</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">Preventable lost sales</div>
+      <div class="metric-val" style="color:var(--amber)">$80K</div>
+      <div class="metric-sub">~90% confidence, M3 tier</div>
+    </div>
+    <div class="metric-cell">
+      <div class="metric-label">PO-ready control</div>
+      <div class="metric-val" style="color:var(--green)">100%</div>
+      <div class="metric-sub">7/7 lines vendor-verified</div>
+    </div>
+  </div>
+</div>
+
+<!-- CADENCE CONTROLS -->
+<section class="cadence" id="cadence">
+  <div class="cadence-inner">
+    <div>
+      <div class="section-label fade-up">03 — PO cadence</div>
+      <h2 class="section-title fade-up" style="max-width:400px">Risk detection ≠ purchase execution.</h2>
+      <p style="font-size:14px;color:var(--t2);line-height:1.7;margin-bottom:28px;max-width:420px" class="fade-up">ROP stays visible as a risk signal, but order quantity follows your buying cycle — not a static long-horizon fill target. An item can be risky without generating a cash-heavy PO.</p>
+      <div class="feature-img-wrap fade-up" style="max-width:420px">
+        <img src="Images/POCandence.png" alt="PO Cadence Controls"/>
+        <div class="feature-img-badge">CADENCE CONTROLS</div>
+      </div>
+    </div>
+    <div>
+      <div class="cadence-controls fade-up">
+        <div class="cadence-card">
+          <div class="cadence-name">Planning window</div>
+          <div class="cadence-def">Weekly / biweekly / monthly / custom — matches your real buying rhythm</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Review days</div>
+          <div class="cadence-def">Days until next planned PO cycle — scopes the current decision window</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Order trigger cover</div>
+          <div class="cadence-def">Buy only when cover is at or below this threshold — prevents early buying</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Top-up target cover</div>
+          <div class="cadence-def">Qty = demand × target cover minus current position — keeps order size practical</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Max cover after PO</div>
+          <div class="cadence-def">MOQ orders above this go to Review — protects working capital from overbuying</div>
+        </div>
+        <div class="cadence-card">
+          <div class="cadence-name">Apply cadence to</div>
+          <div class="cadence-def">All vendors/items or a specific scope — adds vendor-level buying discipline</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRAND HEALTH -->
+<section class="showcase" id="brand-health">
+  <div class="showcase-inner">
+    <div class="section-label fade-up">04 — Brand health</div>
+    <h2 class="section-title fade-up">Which brands are healthy? Which ones are trapping capital?</h2>
+    <p class="section-sub fade-up">Brand Health connects purchasing decisions to vendor-level performance. The risk matrix plots movement strength vs capital trapped in one view.</p>
+
+    <div class="feature-block fade-up">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/BrandHealth.png" alt="Brand Health Dashboard"/>
+      </div>
+      <div class="feature-img-badge">BRAND-LEVEL HEALTH</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Inventory Health Metrics</div>
+        <h3 class="feature-title">Five signals. One vendor table.</h3>
+        <p class="feature-desc">Sortable by any metric. Click any brand to drill into its items. The totals row and FSN share % let you benchmark the whole portfolio at a glance.</p>
+        <ul class="feature-points">
+          <li>Inventory turnover ratio — Standard 2–4×. Red = critical, amber = watchable, green = healthy</li>
+          <li>Days Sales of Inventory (DSI) — Standard 90–180 days</li>
+          <li>Inv-to-sales ratio — capital invested to make $1 of sales. Standard 0.167–0.25</li>
+          <li>FSN classification — Fast / Slow / Non-moving stock value by brand (F &gt; 80%, N &lt; 10%)</li>
+          <li>Obsolete inventory — not sold for 361+ days. Write-off candidates</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-block reverse fade-up">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/BrandHealth1.png" alt="Brand Risk Matrix"/>
+      </div>
+      <div class="feature-img-badge">BRAND RISK MATRIX</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Capital At Risk</div>
+        <h3 class="feature-title">Movement risk vs capital trapped — in one scatter.</h3>
+        <p class="feature-desc">More useful than a treemap: the bubble chart separates healthy capital from slow and obsolete exposure. Bubble size = stock value. X = turnover strength. Y = trapped capital share.</p>
+        <ul class="feature-points">
+          <li>Healthy brands cluster bottom-right (high movement, low trapped capital)</li>
+          <li>Watch brands in the yellow zone — review slow or imbalanced capital</li>
+          <li>Critical brands flagged at top-left — immediate vendor review action</li>
+          <li>Capital at risk strip: Fast / Slow / Non-moving / Obsolete in one stacked bar</li>
+          <li>Click any bubble to drill into item-level breakdown for that vendor</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOST SALES -->
+<section class="showcase" style="background:var(--bg)" id="lost-sales">
+  <div class="showcase-inner">
+    <div class="section-label fade-up">05 — Lost sales intelligence</div>
+    <h2 class="section-title fade-up">Confirmed losses vs preventable risk. Evidence-based.</h2>
+    <p class="section-sub fade-up">Every figure is traceable to a row. No modelled numbers. Lost sales split into operational vs buying root cause.</p>
+
+    <div class="feature-block fade-up">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/LostSales.png" alt="Lost Sales Intelligence"/>
+      </div>
+      <div class="feature-img-badge">LOST SALES — A1 &amp; M3</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Revenue at Risk</div>
+        <h3 class="feature-title">Two tiers. Two actions. Zero guessing.</h3>
+        <p class="feature-desc">A1 confirmed losses are past-due back-orders — already lost revenue split into fulfillment-fail vs real stockout. M3 preventable losses are items below ROP that will become lost sales if the next PO doesn't ship in time.</p>
+        <ul class="feature-points">
+          <li>A1 — 100% proof. Past-due back-orders already on the books</li>
+          <li>M3 — ~90% confidence. Below reorder point. Action: PO this week</li>
+          <li>Upload weekly stock sheet to split A1 into fulfillment-fail vs real stockout</li>
+          <li>Formula visible inline: M3 = Σ max(0, ROP − (OnHand + OnOrder − Committed)) × VendorPriceUSD</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="feature-block reverse fade-up">
+      <div style="display:flex;flex-direction:column;gap:0"><div class="feature-img-wrap">
+        <img src="Images/LostSales1.png" alt="Lost Sales Monthly View"/>
+      </div>
+      <div class="feature-img-badge">MONTHLY VIEW + BRAND BREAKDOWN</div>
+    </div>
+      <div class="feature-content">
+        <div class="feature-tag">Brand-Level Exposure</div>
+        <h3 class="feature-title">Which brands. Which SKUs. How much.</h3>
+        <p class="feature-desc">Monthly bar chart shows projected preventable revenue at risk by period. Brand breakdown table shows confirmed A1 vs preventable M3 exposure — expandable to individual SKU level.</p>
+        <ul class="feature-points">
+          <li>Past = A1 confirmed by ship date. Forward = M3 projected by daily demand</li>
+          <li>By tier and by month views — switch between them instantly</li>
+          <li>Expand any brand row to see item-level confirmed and preventable exposure</li>
+          <li>Share % shows which brands own the largest revenue risk</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW FLOW -->
+<section class="flow">
+  <div class="flow-inner">
+    <div class="section-label fade-up">06 — Workflow</div>
+    <h2 class="section-title fade-up">Four steps. One defensible PO.</h2>
+    <div class="flow-steps">
+      <div class="flow-step fade-up stagger-1">
+        <div class="flow-num">01</div>
+        <div class="flow-step-title">Load workbook</div>
+        <div class="flow-step-desc">Upload a single .xlsx with PO, sales, lead-time, and purchase sheets. Or paste from SSMS. Or run demo data.</div>
+        <div class="flow-arrow"><svg viewBox="0 0 10 10"><polyline points="3 2 7 5 3 8"/></svg></div>
+      </div>
+      <div class="flow-step fade-up stagger-2">
+        <div class="flow-num">02</div>
+        <div class="flow-step-title">Read the risk map</div>
+        <div class="flow-step-desc">Check stockout pressure and immediate-order counts in the cockpit before touching the item table.</div>
+        <div class="flow-arrow"><svg viewBox="0 0 10 10"><polyline points="3 2 7 5 3 8"/></svg></div>
+      </div>
+      <div class="flow-step fade-up stagger-3">
+        <div class="flow-num">03</div>
+        <div class="flow-step-title">Build clean PO</div>
+        <div class="flow-step-desc">Filter by decision type. Edit quantities where needed. Resolve all Review flags before adding to basket.</div>
+        <div class="flow-arrow"><svg viewBox="0 0 10 10"><polyline points="3 2 7 5 3 8"/></svg></div>
+      </div>
+      <div class="flow-step fade-up stagger-4">
+        <div class="flow-num">04</div>
+        <div class="flow-step-title">Export vendor split</div>
+        <div class="flow-step-desc">Generate vendor-split PO output. Every line traces back to the ROP audit trail — defensible from day one.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section class="impact">
+  <div class="section-label fade-up">07 — Business impact</div>
+  <h2 class="section-title fade-up" style="margin-bottom:40px">Built for procurement. Trusted by finance. Reviewed by leadership.</h2>
+  <div class="impact-grid">
+    <div class="impact-card fade-up stagger-1">
+      <div class="impact-card-head">
+        <div class="impact-icon impact-icon-blue">🚚</div>
+        <div class="impact-card-title">Operational</div>
+      </div>
+      <ul class="impact-list">
+        <li>Faster PO review cycles</li>
+        <li>Clearer item prioritization</li>
+        <li>Better stockout visibility</li>
+        <li>Cleaner vendor grouping</li>
+        <li>Less manual spreadsheet work</li>
+        <li>More consistent buyer decisions</li>
+      </ul>
+    </div>
+    <div class="impact-card fade-up stagger-2">
+      <div class="impact-card-head">
+        <div class="impact-icon impact-icon-amber">💰</div>
+        <div class="impact-card-title">Financial</div>
+      </div>
+      <ul class="impact-list">
+        <li>Better PO value control</li>
+        <li>Reduced overbuying risk</li>
+        <li>Improved inventory discipline</li>
+        <li>Better capital allocation</li>
+        <li>Stronger margin context</li>
+        <li>Clearer vendor exposure</li>
+      </ul>
+    </div>
+    <div class="impact-card fade-up stagger-3">
+      <div class="impact-card-head">
+        <div class="impact-icon impact-icon-green">🧑‍💼</div>
+        <div class="impact-card-title">Management</div>
+      </div>
+      <ul class="impact-list">
+        <li>Audit-ready recommendations</li>
+        <li>Better leadership visibility</li>
+        <li>Stronger procurement governance</li>
+        <li>Better vendor review conversations</li>
+        <li>Repeatable decision process</li>
+        <li>Clearer accountability</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DATA MODEL -->
+<section class="data-model" id="data-model">
+  <div class="data-inner">
+    <div class="section-label fade-up">08 — Data model</div>
+    <h2 class="section-title fade-up">One workbook. Four sheets. Full picture.</h2>
+    <p class="section-sub fade-up">No SSMS access required. Works entirely from Excel or CSV exports. SAP Business One users can paste SSMS grid output directly.</p>
+    <div class="sheets-grid fade-up">
+      <div class="sheet-card">
+        <div class="sheet-name">PO_Recommendation</div>
+        <div class="sheet-desc">Main item-level planning — demand, inventory, lead time, ROP logic. Required.</div>
+      </div>
+      <div class="sheet-card">
+        <div class="sheet-name">Brand_Sales_GP</div>
+        <div class="sheet-desc">Brand sales, cost, gross profit, and margin overlay by vendor.</div>
+      </div>
+      <div class="sheet-card">
+        <div class="sheet-name">Lead_Time_History</div>
+        <div class="sheet-desc">Real PO-to-receipt lead-time history by vendor and SKU.</div>
+      </div>
+      <div class="sheet-card">
+        <div class="sheet-name">Purchase_History</div>
+        <div class="sheet-desc">Vendor purchase totals by year — trend and YoY analysis.</div>
+      </div>
+    </div>
+    <div class="input-pills fade-up" style="margin-top:0">
+      <div class="input-pill">📗 Excel workbook</div>
+      <div class="input-pill">📄 CSV file</div>
+      <div class="input-pill">🧮 SSMS paste</div>
+      <div class="input-pill">🧪 Demo data</div>
+      <div class="input-pill">🧩 Module uploads</div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap">
+  <div class="section-label fade-up">09 — Roadmap</div>
+  <h2 class="section-title fade-up">What's next.</h2>
+  <div class="roadmap-grid fade-up">
+    <div class="road-item">🔗 ERP write-back</div>
+    <div class="road-item">🧾 Automated PO drafts</div>
+    <div class="road-item">📦 MOQ &amp; case-pack logic</div>
+    <div class="road-item">💰 Budget simulation</div>
+    <div class="road-item">✅ Approval workflow</div>
+    <div class="road-item">🎯 Service-level optimization</div>
+    <div class="road-item">📈 Forecast tracking</div>
+    <div class="road-item">📊 Vendor scorecards</div>
+    <div class="road-item">🧠 Recommendation history</div>
+    <div class="road-item">🔌 API integration</div>
+    <div class="road-item">📉 Power BI export</div>
+    <div class="road-item">🧪 Scenario testing</div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <div class="disclaimer-box fade-up">
+    <strong>Disclaimer:</strong> This engine provides decision support based on uploaded data and configured assumptions. Final purchasing decisions should be reviewed by the responsible business owner, especially when seasonality, vendor constraints, MOQ rules, or cash-flow limits may affect the recommendation. Every formula is visible and auditable — no black-box scoring.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">📦 PO Decision Engine</div>
+  <div class="footer-sub">Smarter purchase orders. Cleaner cash control. Stronger decisions.</div>
+  <div class="footer-badges">
+    <div class="fbadge">🛒 Built for Procurement Analytics</div>
+    <div class="fbadge">💰 Designed for Finance Review</div>
+    <div class="fbadge">🧑‍💼 Ready for Executive Decisions</div>
+  </div>
+  <p style="font-size:12px;color:var(--t3);margin-top:24px">If this project improves your purchasing workflow, consider starring the repository.</p>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}
+  });
+},{threshold:0.12});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+function animateTicker(){
+  const pills = document.querySelectorAll('.tpill');
+  pills.forEach((p,i)=>{
+    p.classList.remove('show');
+    setTimeout(()=>p.classList.add('show'),(i+1)*150);
+  });
+}
+animateTicker();
+setInterval(()=>{
+  document.querySelectorAll('.tpill').forEach(p=>p.classList.remove('show'));
+  setTimeout(animateTicker,500);
+},7000);
+</script>
+</body>
+</html>
